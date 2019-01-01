@@ -13,6 +13,8 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    'gatsby-plugin-catch-links',
+    'gatsby-transormer-remark',
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     { //need to check what any of this does later...

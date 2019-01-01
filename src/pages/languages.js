@@ -7,8 +7,8 @@ import SEO from '../components/seo'
 const LanguagesIndexPage = () => (
   <Layout>
     <SEO title="Languages" />
-    <h1>LANGUAGES PAGEHere we will have links to other some stuff and links to other pages</h1>
-    <p>Probably 'components' that are cool links to other stuff</p>
+    <h1>Languages page</h1>
+    <p>Should basically just be a copy of the layout of memory page, but with different contents</p>
   </Layout>
 )
 
