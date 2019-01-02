@@ -5,6 +5,7 @@ module.exports = {
     author: `@coffettaja`,
   },
   plugins: [
+    `gatsby-plugin-styled-components`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -13,8 +14,8 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
-    'gatsby-plugin-catch-links',
-    'gatsby-transormer-remark',
+    `gatsby-plugin-catch-links`,
+    `gatsby-transformer-remark`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     { //need to check what any of this does later...
