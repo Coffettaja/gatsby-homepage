@@ -2,16 +2,22 @@ import React from 'react'
 import RadioGroup from './RadioGroup'
 import RadioOption from './RadioOption'
 
-export default class DayOfTheWeekCalculator extends React.Component {
-  // constructor(props) {
-  //   super(props)
-  //   this.state = {
-  //     day: '',
-  //     month: '',
-  //     year: '',
-  //   }
-  // }
+const MONTH_LIST = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+]
 
+export default class DayOfTheWeekCalculator extends React.Component {
   state = {
   day: '',
   month: '',
@@ -19,10 +25,16 @@ export default class DayOfTheWeekCalculator extends React.Component {
   }
 
   onDayChange = (e) => {
-    // console.log(e.target.value)
     const day = e.target.value
     this.setState(() => ({
       day
+    }))
+  }
+
+  onYearChange = (e) => {
+    const year = e.target.value
+    this.setState(() => ({
+      year
     }))
   }
 
@@ -36,9 +48,10 @@ export default class DayOfTheWeekCalculator extends React.Component {
   render() {
     return (
       <div>
+        <h1>The selected date is {this.state.day} {MONTH_LIST[this.state.month - 1]} {this.state.year}</h1>
         <form id="date-form">
           <input value={this.state.day} onChange={this.onDayChange} name="day"  type="text"/>
-          <input value={this.state.year}  name="year" type="text"/>
+          <input value={this.state.year} onChange={this.onYearChange} name="year" type="text"/>
           <RadioGroup 
             name="month"
             onChange={this.onMonthChange}

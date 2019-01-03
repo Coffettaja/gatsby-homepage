@@ -1,5 +1,4 @@
 import React from 'react'
-// import RadioOption from './radioOption'
 
 // Solution 3 from https://techblog.commercetools.com/seven-patterns-by-example-the-many-ways-to-type-radio-in-react-bfe14322bb6f
 /**
