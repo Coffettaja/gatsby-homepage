@@ -26,6 +26,13 @@ export default class DayOfTheWeekCalculator extends React.Component {
     }))
   }
 
+  onMonthChange = (e) => {
+    const month = e.target.value
+    this.setState(() => ({
+      month
+    }))
+  }
+
   render() {
     return (
       <div>
@@ -35,7 +42,7 @@ export default class DayOfTheWeekCalculator extends React.Component {
           <RadioGroup 
             name="month"
             onChange={this.onMonthChange}
-            value="1"
+            value={this.state.month}
           >
             <RadioOption value="1">January</RadioOption>
             <RadioOption value="2">February</RadioOption>

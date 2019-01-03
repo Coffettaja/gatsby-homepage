@@ -1,8 +1,8 @@
 import React from 'react'
 
-const RadioOption = ({value, children}) => (
+const RadioOption = ({value, name, isChecked, onChange, children}) => (
   <label>
-    <input value={value} type="radio"/>
+    <input name={name} value={value} checked={isChecked} onChange={onChange} type="radio"/>
     {children}
   </label>
 )
