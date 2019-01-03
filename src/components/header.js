@@ -14,8 +14,8 @@ const Header = ({ siteTitle }) => (
       <ul>
         <ListLink to="/memory">Memory</ListLink>
         <ListLink to="/languages">Languages</ListLink>
-        <ListLink>Books</ListLink>
-        <ListLink>About me</ListLink>
+        <ListLink to="/dayOfTheWeek">Day of the week calculator</ListLink>
+        <ListLink to="#">About me</ListLink>
       </ul>
     </nav>
   </div>
