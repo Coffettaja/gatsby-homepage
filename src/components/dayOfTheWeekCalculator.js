@@ -2,40 +2,158 @@ import React from 'react'
 import RadioGroup from './RadioGroup'
 import RadioOption from './RadioOption'
 
-const MONTH_LIST = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-]
+/**
+ * An object containing all the months. Every month is an object with:
+ * name (string of the English name),
+ * numberOfDays (number of days for that month in a non-leap year)
+ * monthCode (code of the month used in the formula for calculating the day of the week)
+ */
+const MONTHS = {
+  1: {
+    name: 'January',
+    numberOfDays: 31,
+    monthCode: 1
+  },
+
+  2: {
+    name: 'February',
+    numberOfDays: 28,
+    monthCode: 4
+  },
+
+  3: {
+    name: 'March',
+    numberOfDays: 31,
+    monthCode: 4
+  },
+
+  4: {
+    name: 'April',
+    numberOfDays: 30,
+    monthCode: 0
+  },
+
+  5: {
+    name: 'May',
+    numberOfDays: 31,
+    monthCode: 2
+  },
+
+  6: {
+    name: 'June',
+    numberOfDays: 30,
+    monthCode: 5
+  },
+
+  7: {
+    name: 'July',
+    numberOfDays: 31,
+    monthCode: 0
+  },
+
+  8: {
+    name: 'August',
+    numberOfDays: 31,
+    monthCode: 3
+  },
+
+  9: {
+    name: 'September',
+    numberOfDays: 30,
+    monthCode: 6
+  },
+
+  10: {
+    name: 'October',
+    numberOfDays: 31,
+    monthCode: 1
+  },
+
+  11: {
+    name: 'November',
+    numberOfDays: 30,
+    monthCode: 4
+  },
+
+  12: {
+    name: 'December',
+    numberOfDays: 31,
+    monthCode: 6
+  }
+}
 
 export default class DayOfTheWeekCalculator extends React.Component {
-  state = {
-    day: '',
-    month: '',
-    year: '',
-    isLeapYear: false,
-    error: '',
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      day: '',
+      month: '3',
+      year: '',
+      isLeapYear: false,
+      error: '',
+    }
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    // Whenever any part of the date is changed, the day number has to be checked, so it does not exceed the maximum number of days in the month.
+    if (prevState.month !== this.state.month || prevState.year !== this.state.year || prevState.day !== this.state.day) {
+      this.checkAndUpdateDay()
+    }
+  }
+
+  /**
+   * Checks that the current day number is within the number of days of the 
+   * current month. If not, updates the day number to the last day of the month.
+   * @memberof DayOfTheWeekCalculator
+   */
+  checkAndUpdateDay = () => {
+    // Highest possible date number for the selected month.
+    // let maxDayForMonth = MAX_DAY_FOR_MONTH[+this.state.month]
+    let maxDayForMonth = MONTHS[+this.state.month].numberOfDays
+    // If leap year and february, 28 --> 29
+    if (this.state.isLeapYear && +this.state.month === 2) {
+      maxDayForMonth++
+    }
+
+    // If state has higher date than the max possible, set the day to the max 
+    // value.
+    if (+this.state.day > maxDayForMonth) {
+      this.setState(() => ({
+        day: `${maxDayForMonth}`
+      }))
+    }
+    
   }
 
   onDayChange = (e) => {
     const day = e.target.value.trim()
 
-    // Only allow numbers
-    if (isNaN(+year)) {
+    // Allow empty field
+    if (day.length === 0) {
+      this.setState(() => ({
+        day: ''
+      }))
+      return
+    }
+    // Get the integer value of the input. NaN if invalid value.
+    let dayInt = Math.trunc(+day)
+
+    // TODO: DRY code... same logic repeated in checkAndUpdateDay()
+    // Highest possible date number for the selected month.
+    let maxDayForMonth = MONTHS[+this.state.month].numberOfDays
+    // If leap year and february, 28 --> 29
+    if (this.state.isLeapYear && +this.state.month === 2) {
+      maxDayForMonth++
+    }
+
+    // Only allow numbers between 1 and max.
+    if (isNaN(dayInt) || dayInt < 1 || dayInt > maxDayForMonth) {
       return
     }
 
     this.setState(() => ({
-      day
+      day: `${dayInt}`
     }))
   }
 
@@ -45,23 +163,24 @@ export default class DayOfTheWeekCalculator extends React.Component {
    * @memberof DayOfTheWeekCalculator
    */
   onYearChange = (e) => {
-    const year = e.target.value.trim()
+    // Get the integer value of the input. NaN if invalid value.
+    // Easier to check if valid with integer value.
+    const yearInt = Math.trunc(+e.target.value.trim())
     let isLeapYear = false;
 
-    // Only allow numbers
-    if (isNaN(+year))
+    // Only allow numbers between 0 and max.
+    if (isNaN(yearInt)
+        || yearInt < 0 
+        || yearInt > this.props.maxYear)
     {
       return
     }
     
-    // if there is some value in year input field, check if it is a leap year or not.
-    if (year.length > 0) {
-      // Every fourth year is a leap year, except every 100 years. But then every 400 years is a leap year anyway.
-      isLeapYear = (+year % 400 === 0 || (+year % 4 === 0 && +year % 100 !== 0))
-    }
+    // Every fourth year is a leap year, except every 100 years. But then every 400 years is a leap year anyway.
+    isLeapYear = (yearInt % 400 === 0 || (yearInt % 4 === 0 && yearInt % 100 !== 0))
 
     this.setState(() => ({
-      year,
+      year: `${yearInt}`,
       isLeapYear
     }))
   }
@@ -69,7 +188,7 @@ export default class DayOfTheWeekCalculator extends React.Component {
   onMonthChange = (e) => {
     const month = e.target.value
     // In current setup, this should never happen
-    if (month < 0 || month >= 12) {
+    if (month < 1 || month > 12) {
       this.setState(() => ({
         error: `Invalid month value: ${month}.`
       }))
@@ -83,7 +202,7 @@ export default class DayOfTheWeekCalculator extends React.Component {
   render() {
     return (
       <div>
-        <h1>The selected date is {this.state.day} {MONTH_LIST[this.state.month - 1]} {this.state.year}. Leap year? {this.state.isLeapYear.toString()}</h1>
+        <h1>The selected date is {this.state.day} {MONTHS[this.state.month].name} {this.state.year}. Leap year? {this.state.isLeapYear.toString()}</h1>
         <form id="date-form">
           <input value={this.state.day} onChange={this.onDayChange} name="day"  type="text"/>
           <input value={this.state.year} onChange={this.onYearChange} name="year" type="text"/>
@@ -110,6 +229,10 @@ export default class DayOfTheWeekCalculator extends React.Component {
       </div>
     )
   }
+}
+
+DayOfTheWeekCalculator.defaultProps = {
+  maxYear: 3000,
 }
 
 
