@@ -19,27 +19,62 @@ const MONTH_LIST = [
 
 export default class DayOfTheWeekCalculator extends React.Component {
   state = {
-  day: '',
-  month: '',
-  year: '',
+    day: '',
+    month: '',
+    year: '',
+    isLeapYear: false,
+    error: '',
   }
 
   onDayChange = (e) => {
-    const day = e.target.value
+    const day = e.target.value.trim()
+
+    // Only allow numbers
+    if (isNaN(+year)) {
+      return
+    }
+
     this.setState(() => ({
       day
     }))
   }
 
+  /**
+   * Validates the input value, and changes the year and isLeapYear in 
+   * the component state accordingly. 
+   * @memberof DayOfTheWeekCalculator
+   */
   onYearChange = (e) => {
-    const year = e.target.value
+    const year = e.target.value.trim()
+    let isLeapYear = false;
+
+    // Only allow numbers
+    if (isNaN(+year))
+    {
+      return
+    }
+    
+    // if there is some value in year input field, check if it is a leap year or not.
+    if (year.length > 0) {
+      // Every fourth year is a leap year, except every 100 years. But then every 400 years is a leap year anyway.
+      isLeapYear = (+year % 400 === 0 || (+year % 4 === 0 && +year % 100 !== 0))
+    }
+
     this.setState(() => ({
-      year
+      year,
+      isLeapYear
     }))
   }
 
   onMonthChange = (e) => {
     const month = e.target.value
+    // In current setup, this should never happen
+    if (month < 0 || month >= 12) {
+      this.setState(() => ({
+        error: `Invalid month value: ${month}.`
+      }))
+      return
+    }
     this.setState(() => ({
       month
     }))
@@ -48,7 +83,7 @@ export default class DayOfTheWeekCalculator extends React.Component {
   render() {
     return (
       <div>
-        <h1>The selected date is {this.state.day} {MONTH_LIST[this.state.month - 1]} {this.state.year}</h1>
+        <h1>The selected date is {this.state.day} {MONTH_LIST[this.state.month - 1]} {this.state.year}. Leap year? {this.state.isLeapYear.toString()}</h1>
         <form id="date-form">
           <input value={this.state.day} onChange={this.onDayChange} name="day"  type="text"/>
           <input value={this.state.year} onChange={this.onYearChange} name="year" type="text"/>
