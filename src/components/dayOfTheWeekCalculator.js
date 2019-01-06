@@ -107,11 +107,13 @@ export default class DayOfTheWeekCalculator extends React.Component {
       month: '3',
       year: '',
 
-      // Values used for the formula
+      // Values used for the 'day of the week' -formula
       yearCode: undefined,
-      centuryCode: undefined,
       monthCode: undefined,
       isLeapYear: false,
+
+      // Possibly to be displayed to the user to help with the yearCode calculation.
+      centuryCode: undefined,
 
       // Result
       dayOfTheWeek: '',
@@ -127,25 +129,6 @@ export default class DayOfTheWeekCalculator extends React.Component {
       this.updateDayOfTheWeek()
     }
   }
-
-  updateDayOfTheWeek = () => {
-    // dayIndex represents the day of the week, where 
-    // Sunday: 1, Monday: 2, ... Friday: 6, Saturday: 0
-    let dayIndex = (this.state.yearCode + this.state.monthCode + +this.state.day) % 7
-
-    // For January and February of leap years, we have to subtract 1.
-    if (this.state.isLeapYear && (+this.state.month === 1 || +this.state.month === 2)) {
-      if (dayIndex === 0) {
-        dayIndex = 6 // From Saturday to Friday
-      } else {
-        dayIndex-- // Other days
-      }
-    }
-    this.setState(() => ({
-      dayOfTheWeek: this.DAYS_OF_THE_WEEK[dayIndex]
-    }))
-  }
-
 
   /**
    * Checks that the current day number is within the number of days of the 
@@ -168,7 +151,30 @@ export default class DayOfTheWeekCalculator extends React.Component {
         day: `${maxDayForMonth}`
       }))
     }
-    
+
+  }
+
+  /**
+   * Updated the component state's day of the week value to match the
+   * correct day of the week based on the year and month codes.
+   * @memberof DayOfTheWeekCalculator
+   */
+  updateDayOfTheWeek = () => {
+    // dayIndex represents the day of the week, where 
+    // Sunday: 1, Monday: 2, ... Friday: 6, Saturday: 0
+    let dayIndex = (this.state.yearCode + this.state.monthCode + +this.state.day) % 7
+
+    // For January and February of leap years, we have to subtract 1 from the // result.
+    if (this.state.isLeapYear && (+this.state.month === 1 || +this.state.month === 2)) {
+      if (dayIndex === 0) {
+        dayIndex = 6 // From Saturday to Friday
+      } else {
+        dayIndex-- // Other days
+      }
+    }
+    this.setState(() => ({
+      dayOfTheWeek: this.DAYS_OF_THE_WEEK[dayIndex]
+    }))
   }
 
   onDayChange = (e) => {
@@ -203,8 +209,8 @@ export default class DayOfTheWeekCalculator extends React.Component {
   }
 
   /**
-   * Validates the input value, and changes the year and isLeapYear in 
-   * the component state accordingly. 
+   * Validates the input value, and changes the year, yearCode, centuryCode and 
+   * isLeapYear in the component state accordingly. 
    * @memberof DayOfTheWeekCalculator
    */
   onYearChange = (e) => {
@@ -224,7 +230,6 @@ export default class DayOfTheWeekCalculator extends React.Component {
     // Every fourth year is a leap year, except every 100 years. But then every 400 years is a leap year anyway.
     isLeapYear = (yearInt % 400 === 0 || (yearInt % 4 === 0 && yearInt % 100 !== 0))
 
-    // Century code used in the formula for calculating the yearCode below.
     const { yearCode, centuryCode } = this.calculateYearAndCenturyCode(yearInt)
 
     this.setState(() => ({
@@ -235,6 +240,11 @@ export default class DayOfTheWeekCalculator extends React.Component {
     }))
   }
 
+  /**
+   * Calculates and returns the year and century codes for a given year in an 
+   * object.
+   * @memberof DayOfTheWeekCalculator
+   */
   calculateYearAndCenturyCode = (year) => {
     // Gets the century by removing the last two numbers of the year.
     const century = Math.trunc(year / 100)
