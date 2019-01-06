@@ -133,7 +133,6 @@ export default class DayOfTheWeekCalculator extends React.Component {
     // Sunday: 1, Monday: 2, ... Friday: 6, Saturday: 0
     let dayIndex = (this.state.yearCode + this.state.monthCode + +this.state.day) % 7
 
-    console.log(this.state.yearCode)
     // For January and February of leap years, we have to subtract 1.
     if (this.state.isLeapYear && (+this.state.month === 1 || +this.state.month === 2)) {
       if (dayIndex === 0) {
@@ -225,25 +224,27 @@ export default class DayOfTheWeekCalculator extends React.Component {
     // Every fourth year is a leap year, except every 100 years. But then every 400 years is a leap year anyway.
     isLeapYear = (yearInt % 400 === 0 || (yearInt % 4 === 0 && yearInt % 100 !== 0))
 
+    // Century code used in the formula for calculating the yearCode below.
+    const { yearCode, centuryCode } = this.calculateYearAndCenturyCode(yearInt)
+
     this.setState(() => ({
       year: `${yearInt}`,
-      isLeapYear
-    }), 
-      () => this.updateYearAndCenturyCodes()
-    )
+      isLeapYear,
+      yearCode,
+      centuryCode
+    }))
   }
 
-  updateYearAndCenturyCodes = () => {
+  calculateYearAndCenturyCode = (year) => {
     // Gets the century by removing the last two numbers of the year.
-    const century = Math.trunc(+this.state.year / 100)
+    const century = Math.trunc(year / 100)
 
     // Looks like the formula (arrIndex % arr.length + arrLength) % arrLength as the index of an array gets the array value for both positive and negative arrIndex values, going on infinitely. That is, arrIndex = -1 gets arr[length - 1], and arrIndex = arr.length gets arr[0]
     // This way it is possible to get the century code for any century (or at least for years  0 - 9999, haven't thought about other years) just by looping the centuryCodes array backwards or forwards.  
     // Explanation for the meaning & purpose of the century code in the comments for the century codes array in the constructor.
     const centuryCode = this.CENTURY_CODES[((century) % this.CENTURY_CODES.length + this.CENTURY_CODES.length) % this.CENTURY_CODES.length]
 
-    const lastTwoNumbers = +this.state.year - century * 100
-    console.log(`Year: ${this.state.year}, Century: ${century}, Last two numbers: ${lastTwoNumbers}, Century code: ${centuryCode}`)
+    const lastTwoNumbers = year - century * 100
     // yearcode == (centuryCode + lastTwoDigitsOfYear + (lastTwoDigitsOfYear div 4)) mod 7
     // For example yearCode for 1992:
     // (0 + 92 + (92 div 4)) mod 7
@@ -251,10 +252,7 @@ export default class DayOfTheWeekCalculator extends React.Component {
     // = 3 
     const yearCode = (centuryCode + lastTwoNumbers + (Math.trunc(lastTwoNumbers / 4))) % 7
 
-    this.setState(() => ({
-      yearCode,
-      centuryCode
-    }), () => this.updateDayOfTheWeek())
+    return {yearCode, centuryCode}
   }
 
   /**
