@@ -1,6 +1,7 @@
 import React from 'react'
-import RadioGroup from './RadioGroup'
-import RadioOption from './RadioOption'
+import RadioGroup from './radioGroup'
+import RadioOption from './radioOption'
+import BoxInput from './boxInput'
 
 export default class DayOfTheWeekCalculator extends React.Component {
 
@@ -118,6 +119,9 @@ export default class DayOfTheWeekCalculator extends React.Component {
       // Result
       dayOfTheWeek: '',
       error: '',
+
+      //
+      displayAnswer: false,
     }
   }
 
@@ -158,7 +162,10 @@ export default class DayOfTheWeekCalculator extends React.Component {
    * @memberof DayOfTheWeekCalculator
    */
   updateDayOfTheWeek = () => {
-    if (this.state.day.length == 0) {
+    if (this.state.day.length === 0 || this.state.year.length === 0) {
+      this.setState(() => ({
+        dayOfTheWeek: ''
+      }))
       return
     }
     // dayIndex represents the day of the week, where 
@@ -302,12 +309,23 @@ export default class DayOfTheWeekCalculator extends React.Component {
     this.setState(this.updateMonth(month))
   }
 
+  onDateFormSubmit = (e) => {
+    e.preventDefault()
+    if (this.state.dayOfTheWeek.length === 0) {
+      return
+    }
+    this.setState(() => ({
+      displayAnswer: true,
+    }))
+  }
+
   render() {
     return (
       <div>
         <h1>The selected date is {this.state.day} {this.MONTHS[this.state.month].name} {this.state.year}. Leap year? {this.state.isLeapYear.toString()}</h1>
-        <form id="date-form">
+        <form id="date-form" onSubmit={this.onDateFormSubmit}>
           <input value={this.state.day} onChange={this.onDayChange} name="day"  type="text"/>
+          <BoxInput value={3} onChange={this.onDayChange} choices={[1,2,3,4,5,6,7,8,9,10]} />
           <input value={this.state.year} onChange={this.onYearChange} name="year" type="text"/>
           <RadioGroup 
             name="month"
@@ -329,7 +347,7 @@ export default class DayOfTheWeekCalculator extends React.Component {
           </RadioGroup>
           <button type="submit">Submit</button>
         </form>
-        <h1>Day of the week: {this.state.dayOfTheWeek}</h1>
+        {this.state.displayAnswer && <h1>Day oaaf the week: {this.state.dayOfTheWeek}</h1>}
       </div>
     )
   }
