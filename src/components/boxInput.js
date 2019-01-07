@@ -1,6 +1,10 @@
 import React from 'react'
 
-const BoxOption = ({value, onClick, children}) => { 
+const BoxOption = ({value, children, getValue}) => { 
+
+  const onClick = () => {
+    getValue(value)
+  } 
 
   return (
     <div value={value} onClick={onClick}>
@@ -9,22 +13,16 @@ const BoxOption = ({value, onClick, children}) => {
   )
 }
 
-const BoxInput = ({value, onChange, choices}) => {
-  const onClick = (e) => {
-    console.log(e.target)
-  } 
-  
+const BoxInput = ({value, onChange, children}) => {
+  const getValue = (value) => {
+    console.log(value)
+  }
+
   return (
     <div>
-      {choices.map((choice, index) => {
-        return (
-          <BoxOption value={choice} onClick={onClick} key={index}>
-            {`${choice}`}
-          </BoxOption>
-        )
-      })}
+      {children}
     </div>
   )
 }
 
-export default BoxInput
+export { BoxInput, BoxOption }

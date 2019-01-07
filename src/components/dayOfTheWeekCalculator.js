@@ -1,7 +1,7 @@
 import React from 'react'
-import RadioGroup from './radioGroup'
-import RadioOption from './radioOption'
-import BoxInput from './boxInput'
+import {RadioGroup, RadioOption} from './radioGroup'
+// import RadioOption from './radioOption'
+import {BoxInput, BoxOption} from './boxInput'
 
 export default class DayOfTheWeekCalculator extends React.Component {
 
@@ -105,7 +105,7 @@ export default class DayOfTheWeekCalculator extends React.Component {
     this.state = {
       // Currently selected date
       day: '',
-      month: '3',
+      month: undefined,
       year: '',
 
       // Values used for the 'day of the week' -formula
@@ -123,6 +123,11 @@ export default class DayOfTheWeekCalculator extends React.Component {
       //
       displayAnswer: false,
     }
+  }
+
+  // TODO Fix this because setting state here is probably not good for performance...
+  componentDidMount = () => {
+    this.setState(this.updateMonth(1)) // TOOD No initial month
   }
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -164,7 +169,7 @@ export default class DayOfTheWeekCalculator extends React.Component {
   updateDayOfTheWeek = () => {
     if (this.state.day.length === 0 || this.state.year.length === 0) {
       this.setState(() => ({
-        dayOfTheWeek: ''
+        dayOfTheWeek: '',
       }))
       return
     }
@@ -173,7 +178,7 @@ export default class DayOfTheWeekCalculator extends React.Component {
     let dayIndex = (this.state.yearCode + this.state.monthCode + +this.state.day) % 7
 
     // For January and February of leap years, we have to subtract 1 from the // result.
-    if (this.state.isLeapYear && (+this.state.month === 1 || +this.state.month === 2)) {
+    if (this.state.isLeapYear && (this.state.month === 1 || this.state.month === 2)) {
       if (dayIndex === 0) {
         dayIndex = 6 // From Saturday to Friday
       } else {
@@ -181,7 +186,7 @@ export default class DayOfTheWeekCalculator extends React.Component {
       }
     }
     this.setState(() => ({
-      dayOfTheWeek: this.DAYS_OF_THE_WEEK[dayIndex]
+      dayOfTheWeek: this.DAYS_OF_THE_WEEK[dayIndex] || ''
     }))
   }
 
@@ -200,9 +205,9 @@ export default class DayOfTheWeekCalculator extends React.Component {
 
     // TODO: DRY code... same logic repeated in checkAndUpdateDay()
     // Highest possible date number for the selected month.
-    let maxDayForMonth = this.MONTHS[+this.state.month].numberOfDays
+    let maxDayForMonth = this.MONTHS[this.state.month].numberOfDays
     // If leap year and february, 28 --> 29
-    if (this.state.isLeapYear && +this.state.month === 2) {
+    if (this.state.isLeapYear && this.state.month === 2) {
       maxDayForMonth++
     }
 
@@ -297,7 +302,7 @@ export default class DayOfTheWeekCalculator extends React.Component {
    * @memberof DayOfTheWeekCalculator
    */
   onMonthChange = (e) => {
-    const month = e.target.value
+    const month = +e.target.value
     // In current setup, this should never happen
     if (month < 1 || month > 12) {
       this.setState(() => ({
@@ -322,28 +327,27 @@ export default class DayOfTheWeekCalculator extends React.Component {
   render() {
     return (
       <div>
-        <h1>The selected date is {this.state.day} {this.MONTHS[this.state.month].name} {this.state.year}. Leap year? {this.state.isLeapYear.toString()}</h1>
+        <h1>Day of the Week Calculator</h1>
         <form id="date-form" onSubmit={this.onDateFormSubmit}>
           <input value={this.state.day} onChange={this.onDayChange} name="day"  type="text"/>
-          <BoxInput value={3} onChange={this.onDayChange} choices={[1,2,3,4,5,6,7,8,9,10]} />
           <input value={this.state.year} onChange={this.onYearChange} name="year" type="text"/>
           <RadioGroup 
             name="month"
             onChange={this.onMonthChange}
             value={this.state.month}
           >
-            <RadioOption value="1">January</RadioOption>
-            <RadioOption value="2">February</RadioOption>
-            <RadioOption value="3">March</RadioOption>
-            <RadioOption value="4">April</RadioOption>
-            <RadioOption value="5">May</RadioOption>
-            <RadioOption value="6">June</RadioOption>
-            <RadioOption value="7">July</RadioOption>
-            <RadioOption value="8">August</RadioOption>
-            <RadioOption value="9">September</RadioOption>
-            <RadioOption value="10">October</RadioOption>
-            <RadioOption value="11">November</RadioOption>
-            <RadioOption value="12">December</RadioOption>
+            <RadioOption value={1}>January</RadioOption>
+            <RadioOption value={2}>February</RadioOption>
+            <RadioOption value={3}>March</RadioOption>
+            <RadioOption value={4}>April</RadioOption>
+            <RadioOption value={5}>May</RadioOption>
+            <RadioOption value={6}>June</RadioOption>
+            <RadioOption value={7}>July</RadioOption>
+            <RadioOption value={8}>August</RadioOption>
+            <RadioOption value={9}>September</RadioOption>
+            <RadioOption value={10}>October</RadioOption>
+            <RadioOption value={11}>November</RadioOption>
+            <RadioOption value={12}>December</RadioOption>
           </RadioGroup>
           <button type="submit">Submit</button>
         </form>
