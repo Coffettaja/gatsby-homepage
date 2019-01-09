@@ -9,7 +9,7 @@ const LanguagesIndexPage = () => (
   <Layout>
     <SEO title="Languages" />
     <h1>Languages page</h1>
-    <MultiSearch></MultiSearch>
+    <MultiSearch language="jp"></MultiSearch>
   </Layout>
 )
 

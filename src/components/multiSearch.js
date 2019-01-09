@@ -12,7 +12,7 @@ const OptionToggle = styled.label`
   background-color: orangered;
   padding: 1rem;
   position: relative;
-  display: flex;
+  display: ${props => props.hidden ? "none" : "flex"};
   justify-content: center;
   align-items: center;
   height: 5.5rem;
@@ -50,12 +50,11 @@ export default class MultiSearch extends React.Component {
 
     this.state = {
       searchValue: '',
-      language: 'jp',
       images: true,
       pronunciation: false,
       wiki: false,
       dictionary: true,
-      kanjis: true,
+      kanjis: false,
       definition: false,
     }
   }
@@ -105,7 +104,7 @@ export default class MultiSearch extends React.Component {
           <OptionToggle>
             <input value="dictionary" checked={this.state.dictionary} onChange={this.toggleValue} type="checkbox"/>Dictionary
           </OptionToggle>
-          <OptionToggle>
+          <OptionToggle hidden={this.props.language !== 'jp'}>
             <input value="kanjis" checked={this.state.kanjis} onChange={this.toggleValue} type="checkbox"/>Kanjis
           </OptionToggle>
           <OptionToggle>
