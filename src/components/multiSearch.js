@@ -1,4 +1,48 @@
 import React from 'react'
+import styled from 'styled-components'
+
+const ToggleContainer = styled.div`
+  background-color: hsl(15, 5%, 95%);
+  display: flex;
+  padding: 2rem 3rem;
+  margin: 2rem 0;
+`
+
+const OptionToggle = styled.label`
+  background-color: orangered;
+  padding: 1rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 5.5rem;
+  width: 11rem;
+  border-radius: 2px;
+  margin: 0 1rem;
+  color: white;
+  font-size: 1.6rem;
+  cursor: pointer;
+
+  :hover {
+    opacity: .9;
+  }
+
+  input {
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+  }
+`
+const SearchValueInput = styled.input`
+  width: 80%;
+  font-size: 2rem;
+  padding: .8rem;
+  letter-spacing: 1px;
+  margin-top: 2rem;
+`
 
 export default class MultiSearch extends React.Component {
   constructor(props) {
@@ -56,27 +100,27 @@ export default class MultiSearch extends React.Component {
   render() {
     return (
       <form onSubmit={this.onSubmit}>
-        <input onChange={this.onSearchInputChange} value={this.state.searchValue} type="text"/>
-        <div>
-          <label>
+        <SearchValueInput placeholder="Search a word" onChange={this.onSearchInputChange} value={this.state.searchValue} type="text"/>
+        <ToggleContainer>
+          <OptionToggle>
             <input value="dictionary" checked={this.state.dictionary} onChange={this.toggleValue} type="checkbox"/>Dictionary
-          </label>
-          <label>
+          </OptionToggle>
+          <OptionToggle>
             <input value="kanjis" checked={this.state.kanjis} onChange={this.toggleValue} type="checkbox"/>Kanjis
-          </label>
-          <label>
+          </OptionToggle>
+          <OptionToggle>
             <input value="images" checked={this.state.images} onChange={this.toggleValue} type="checkbox"/>Images
-          </label>
-          <label>
+          </OptionToggle>
+          <OptionToggle>
             <input value="definition" checked={this.state.definition} onChange={this.toggleValue} type="checkbox"/>Definition
-          </label>
-          <label>
+          </OptionToggle>
+          <OptionToggle>
             <input value="pronunciation" checked={this.state.pronunciation} onChange={this.toggleValue} type="checkbox"/>Pronunciation
-          </label>
-          <label>
+          </OptionToggle>
+          <OptionToggle>
             <input value="wiki" checked={this.state.wiki} onChange={this.toggleValue} type="checkbox"/>Wikipedia
-          </label>
-        </div>
+          </OptionToggle>
+        </ToggleContainer>
         <button>MultiSearch</button>
       </form>
       
