@@ -18,12 +18,24 @@ export default class MultiSearch extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault()
-    window.open(`https://www.google.com/search?tbm=isch&q=${this.state.searchValue}`)
-    window.open(`https://forvo.com/word/${this.state.searchValue}/`)
-    window.open(`https://ja.wikipedia.org/wiki/${this.state.searchValue}`)
-    window.open(`https://jisho.org/search/${this.state.searchValue}`)
-    window.open(`https://jisho.org/search/${this.state.searchValue}%20%23kanji`)
-    window.open(`https://dictionary.goo.ne.jp/srch/jn/${this.state.searchValue}/m0u/`)
+    if (this.state.dictionary) {
+      window.open(`https://jisho.org/search/${this.state.searchValue}`)
+    }
+    if (this.state.kanjis) {
+      window.open(`https://jisho.org/search/${this.state.searchValue}%20%23kanji`)
+    }
+    if (this.state.images) {
+      window.open(`https://www.google.com/search?tbm=isch&q=${this.state.searchValue}`)
+    }
+    if (this.state.definition) {
+      window.open(`https://dictionary.goo.ne.jp/srch/jn/${this.state.searchValue}/m0u/`)
+    }
+    if (this.state.pronunciation) {
+      window.open(`https://forvo.com/word/${this.state.searchValue}/`)
+    }
+    if (this.state.wiki) {
+      window.open(`https://ja.wikipedia.org/wiki/${this.state.searchValue}`)
+    }
   }
 
   onSearchInputChange = (e) => {
