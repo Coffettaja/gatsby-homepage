@@ -6,6 +6,13 @@ export default class MultiSearch extends React.Component {
 
     this.state = {
       searchValue: '',
+      language: 'jp',
+      images: true,
+      pronunciation: false,
+      wiki: false,
+      dictionary: true,
+      kanjis: true,
+      definition: false,
     }
   }
 
@@ -26,12 +33,41 @@ export default class MultiSearch extends React.Component {
     }))
   }
 
+  // Temporary function, TODO fix
+  toggleValue = (e) => {
+    const valueToChange = e.target.value // Value of the checkbox has to match the property name in the component state.
+    const newState = {}
+    newState[`${valueToChange}`] = !this.state[valueToChange]
+    this.setState(() => newState)
+  }
+
   render() {
     return (
       <form onSubmit={this.onSubmit}>
         <input onChange={this.onSearchInputChange} value={this.state.searchValue} type="text"/>
+        <div>
+          <label>
+            <input value="dictionary" checked={this.state.dictionary} onChange={this.toggleValue} type="checkbox"/>Dictionary
+          </label>
+          <label>
+            <input value="kanjis" checked={this.state.kanjis} onChange={this.toggleValue} type="checkbox"/>Kanjis
+          </label>
+          <label>
+            <input value="images" checked={this.state.images} onChange={this.toggleValue} type="checkbox"/>Images
+          </label>
+          <label>
+            <input value="definition" checked={this.state.definition} onChange={this.toggleValue} type="checkbox"/>Definition
+          </label>
+          <label>
+            <input value="pronunciation" checked={this.state.pronunciation} onChange={this.toggleValue} type="checkbox"/>Pronunciation
+          </label>
+          <label>
+            <input value="wiki" checked={this.state.wiki} onChange={this.toggleValue} type="checkbox"/>Wikipedia
+          </label>
+        </div>
         <button>MultiSearch</button>
       </form>
+      
     )
   }
 }
