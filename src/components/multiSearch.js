@@ -8,34 +8,6 @@ const ToggleContainer = styled.div`
   margin: 2rem 0;
 `
 
-const OptionToggle = styled.label`
-  background-color: orangered;
-  padding: 1rem;
-  position: relative;
-  display: ${props => props.hidden ? "none" : "flex"};
-  justify-content: center;
-  align-items: center;
-  height: 5.5rem;
-  width: 11rem;
-  border-radius: 2px;
-  margin: 0 1rem;
-  color: white;
-  font-size: 1.6rem;
-  cursor: pointer;
-
-  :hover {
-    opacity: .9;
-  }
-
-  input {
-    width: 2rem;
-    height: 2rem;
-    position: absolute;
-    top: 0;
-    left: 0;
-    cursor: pointer;
-  }
-`
 const SearchValueInput = styled.input`
   width: 80%;
   font-size: 2rem;
@@ -45,53 +17,51 @@ const SearchValueInput = styled.input`
 `
 
 const Toggle = ({labelText,  ...rest}) => (
-  <div>
+  <label>
     <input {...rest} value={labelText} type="checkbox" />
-    <label>{labelText}</label>
-  </div>
+    {labelText}
+  </label>
 )
 
 export default class MultiSearch extends React.Component {
   constructor(props) {
     super(props)
 
+    // this.japaneseCharacters = /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf]/
+
     this.state = {
       searchValue: '',
       toggles: props.initialSites,
-      // images: true,
-      // pronunciation: false,
-      // wiki: false,
-      // dictionary: true,
-      // kanjis: false,
-      // definition: false,
+      searchError: '',
     }
   }
 
   onSubmit = (e) => {
     e.preventDefault()
-   Object.keys(this.state.toggles)
-      .filter(toggleValue => this.state.toggles[toggleValue].checked)
-      .forEach((toggleValue) => {
-        window.open(
-          this.state.toggles[toggleValue].url
-          .replace(this.props.searchTermCode, this.state.searchValue))
-    })
-    // console.log(urlsToOpen)
+    if (this.state.searchError.length > 0) {
+      return
+    }
+    Object.keys(this.state.toggles)
+       .filter(toggleValue => this.state.toggles[toggleValue].checked)
+       .forEach((toggleValue) => {
+         window.open(
+           this.state.toggles[toggleValue].url
+           .replace(this.props.searchTermCode, this.state.searchValue))
+    }) 
   }
 
   onSearchInputChange = (e) => {
     const searchValue = e.target.value
+    let searchError = ''
+    if (searchValue.length === 0) {
+      searchError = "No search term"
+    }
+    
     this.setState(() => ({
-      searchValue
+      searchValue,
+      searchError
     }))
-  }
-
-  // Temporary function, TODO fix
-  toggleValue = (e) => {
-    const valueToChange = e.target.value // Value of the checkbox has to match the property name in the component state.
-    const newState = {}
-    newState[`${valueToChange}`] = !this.state[valueToChange]
-    this.setState(() => newState)
+    
   }
 
   onToggle = (e) => {
@@ -118,42 +88,10 @@ export default class MultiSearch extends React.Component {
             ></Toggle> 
           ))}
         </ToggleContainer>
+        <p>{this.state.searchError}</p>
         <button>MultiSearch</button>
       </form>
       
     )
   }
 }
-
-/*
-this.state.toggles.map((toggle, index) => (
-            <Toggle
-              labelText={toggle.labelText}
-              onChange={this.onToggle}
-              key={index}
-            ></Toggle>
-          ))
-
-
-
-<ToggleContainer>
-          <OptionToggle>
-            <input value="dictionary" checked={this.state.dictionary} onChange={this.toggleValue} type="checkbox"/>Dictionary
-          </OptionToggle>
-          <OptionToggle hidden={this.props.language !== 'jp'}>
-            <input value="kanjis" checked={this.state.kanjis} onChange={this.toggleValue} type="checkbox"/>Kanjis
-          </OptionToggle>
-          <OptionToggle>
-            <input value="images" checked={this.state.images} onChange={this.toggleValue} type="checkbox"/>Images
-          </OptionToggle>
-          <OptionToggle>
-            <input value="definition" checked={this.state.definition} onChange={this.toggleValue} type="checkbox"/>Definition
-          </OptionToggle>
-          <OptionToggle>
-            <input value="pronunciation" checked={this.state.pronunciation} onChange={this.toggleValue} type="checkbox"/>Pronunciation
-          </OptionToggle>
-          <OptionToggle>
-            <input value="wiki" checked={this.state.wiki} onChange={this.toggleValue} type="checkbox"/>Wikipedia
-          </OptionToggle>
-        </ToggleContainer>
-*/

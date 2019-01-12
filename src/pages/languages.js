@@ -10,8 +10,8 @@ const LanguagesIndexPage = () => (
     <SEO title="Languages" />
     <h1>Languages page</h1>
     <MultiSearch 
-      searchBoxText="Japanese???"
-      searchTermCode="$searchterm$"
+      searchBoxText="Search Japanese"
+      searchTermCode="$searchterm$" // marks the place in the URL where the search value should be placed
       initialSites={
         {
           dictionary: {
