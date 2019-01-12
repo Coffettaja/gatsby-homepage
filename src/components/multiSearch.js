@@ -69,12 +69,14 @@ export default class MultiSearch extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault()
-    const urlsToOpen = Object.keys(this.state.toggles)
+   Object.keys(this.state.toggles)
       .filter(toggleValue => this.state.toggles[toggleValue].checked)
-      .map((toggleValue) => {
-      return this.state.toggles[toggleValue].url
+      .forEach((toggleValue) => {
+        window.open(
+          this.state.toggles[toggleValue].url
+          .replace(this.props.searchTermCode, this.state.searchValue))
     })
-    console.log(urlsToOpen)
+    // console.log(urlsToOpen)
   }
 
   onSearchInputChange = (e) => {

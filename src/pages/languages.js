@@ -11,6 +11,7 @@ const LanguagesIndexPage = () => (
     <h1>Languages page</h1>
     <MultiSearch 
       searchBoxText="Japanese???"
+      searchTermCode="$searchterm$"
       initialSites={
         {
           dictionary: {
