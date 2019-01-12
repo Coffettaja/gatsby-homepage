@@ -44,41 +44,37 @@ const SearchValueInput = styled.input`
   margin-top: 2rem;
 `
 
+const Toggle = ({labelText,  ...rest}) => (
+  <div>
+    <input {...rest} value={labelText} type="checkbox" />
+    <label>{labelText}</label>
+  </div>
+)
+
 export default class MultiSearch extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
       searchValue: '',
-      images: true,
-      pronunciation: false,
-      wiki: false,
-      dictionary: true,
-      kanjis: false,
-      definition: false,
+      toggles: props.initialSites,
+      // images: true,
+      // pronunciation: false,
+      // wiki: false,
+      // dictionary: true,
+      // kanjis: false,
+      // definition: false,
     }
   }
 
   onSubmit = (e) => {
     e.preventDefault()
-    if (this.state.dictionary) {
-      window.open(`https://jisho.org/search/${this.state.searchValue}`)
-    }
-    if (this.state.kanjis) {
-      window.open(`https://jisho.org/search/${this.state.searchValue}%20%23kanji`)
-    }
-    if (this.state.images) {
-      window.open(`https://www.google.com/search?tbm=isch&q=${this.state.searchValue}`)
-    }
-    if (this.state.definition) {
-      window.open(`https://dictionary.goo.ne.jp/srch/jn/${this.state.searchValue}/m0u/`)
-    }
-    if (this.state.pronunciation) {
-      window.open(`https://forvo.com/word/${this.state.searchValue}/`)
-    }
-    if (this.state.wiki) {
-      window.open(`https://ja.wikipedia.org/wiki/${this.state.searchValue}`)
-    }
+    const urlsToOpen = Object.keys(this.state.toggles)
+      .filter(toggleValue => this.state.toggles[toggleValue].checked)
+      .map((toggleValue) => {
+      return this.state.toggles[toggleValue].url
+    })
+    console.log(urlsToOpen)
   }
 
   onSearchInputChange = (e) => {
@@ -96,11 +92,49 @@ export default class MultiSearch extends React.Component {
     this.setState(() => newState)
   }
 
+  onToggle = (e) => {
+   const toggleToChange = e.target.value
+   const newValue = e.target.checked
+   const newToggles = this.state.toggles
+   newToggles[toggleToChange].checked = newValue
+    this.setState(() => ({
+      toggles: newToggles
+   }))
+  }
+
   render() {
     return (
       <form onSubmit={this.onSubmit}>
         <SearchValueInput placeholder="Search a word" onChange={this.onSearchInputChange} value={this.state.searchValue} type="text"/>
         <ToggleContainer>
+          {Object.keys(this.state.toggles).map((toggleKey, index) => (
+            <Toggle
+              labelText={toggleKey}
+              onChange={this.onToggle}
+              checked={this.state.toggles[toggleKey].checked}
+              key={index}
+            ></Toggle> 
+          ))}
+        </ToggleContainer>
+        <button>MultiSearch</button>
+      </form>
+      
+    )
+  }
+}
+
+/*
+this.state.toggles.map((toggle, index) => (
+            <Toggle
+              labelText={toggle.labelText}
+              onChange={this.onToggle}
+              key={index}
+            ></Toggle>
+          ))
+
+
+
+<ToggleContainer>
           <OptionToggle>
             <input value="dictionary" checked={this.state.dictionary} onChange={this.toggleValue} type="checkbox"/>Dictionary
           </OptionToggle>
@@ -120,9 +154,4 @@ export default class MultiSearch extends React.Component {
             <input value="wiki" checked={this.state.wiki} onChange={this.toggleValue} type="checkbox"/>Wikipedia
           </OptionToggle>
         </ToggleContainer>
-        <button>MultiSearch</button>
-      </form>
-      
-    )
-  }
-}
+*/
