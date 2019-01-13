@@ -31,7 +31,6 @@ export default class MultiSearch extends React.Component {
 
     this.state = {
       searchValue: '',
-      toggles: props.initialSites,
       searchError: '',
     }
   }
@@ -41,11 +40,11 @@ export default class MultiSearch extends React.Component {
     if (this.state.searchError.length > 0) {
       return
     }
-    Object.keys(this.state.toggles)
-       .filter(toggleValue => this.state.toggles[toggleValue].checked)
+    Object.keys(this.props.initialSites)
+       .filter(toggleValue => this.props.initialSites[toggleValue].checked)
        .forEach((toggleValue) => {
          window.open(
-           this.state.toggles[toggleValue].url
+           this.props.initialSites[toggleValue].url
            .replace(this.props.searchTermCode, this.state.searchValue))
     }) 
   }
@@ -67,7 +66,7 @@ export default class MultiSearch extends React.Component {
   onToggle = (e) => {
    const toggleToChange = e.target.value
    const newValue = e.target.checked
-   const newToggles = this.state.toggles
+   const newToggles = this.props.initialSites
    newToggles[toggleToChange].checked = newValue
     this.setState(() => ({
       toggles: newToggles
@@ -79,11 +78,11 @@ export default class MultiSearch extends React.Component {
       <form onSubmit={this.onSubmit}>
         <SearchValueInput placeholder={this.props.searchBoxText} onChange={this.onSearchInputChange} value={this.state.searchValue} type="text"/>
         <ToggleContainer>
-          {Object.keys(this.state.toggles).map((toggleKey, index) => (
+          {Object.keys(this.props.initialSites).map((toggleKey, index) => (
             <Toggle
               labelText={toggleKey}
               onChange={this.onToggle}
-              checked={this.state.toggles[toggleKey].checked}
+              checked={this.props.initialSites[toggleKey].checked}
               key={index}
             ></Toggle> 
           ))}

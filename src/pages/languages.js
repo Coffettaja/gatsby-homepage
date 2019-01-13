@@ -12,7 +12,7 @@ class LanguagesIndexPage extends React.Component {
       {
         value: 'japanese',
         initialSites: {
-          dictionary: {
+          translation: {
             labelText: 'dictionary',
             url: 'https://jisho.org/search/$searchterm$',
             checked: true
@@ -32,7 +32,7 @@ class LanguagesIndexPage extends React.Component {
             url: 'https://forvo.com/word/$searchterm$/',
             checked: false
           },
-          definition: {
+          dictionary: {
             labelText: 'definition',
             url: 'https://dictionary.goo.ne.jp/srch/jn/$searchterm$/m0u/',
             checked: true
@@ -52,6 +52,15 @@ class LanguagesIndexPage extends React.Component {
       {
         value: 'korean',
         initialSites: {
+          'in English': {
+            labelText: 'dictionary',
+            url: 'https://endic.naver.com/search.nhn?sLn=en&searchOption=entry_idiom&query=$searchterm$',
+            checked: true
+          },
+          'in Japanese': {
+            url: 'http://www.kpedia.jp/s/1/$searchterm$',
+            checked: true
+          },
           images: {
             labelText: 'image',
             url: 'https://www.google.com/search?tbm=isch&q=$searchterm$',
@@ -62,11 +71,25 @@ class LanguagesIndexPage extends React.Component {
             url: 'https://forvo.com/word/$searchterm$/',
             checked: false
           },
+          wiki: {
+            labelText: 'wiki',
+            url: 'https://ja.wikipedia.org/wiki/$searchterm$',
+            checked: false
+          },
         }
       }
     ],
-    selectedOption: 'japanese',
+    selectedOption: '',
     currentSites: {},
+  }
+
+  componentDidMount = () => {
+    const initialSelectionIndex = 1
+    const {value, initialSites} = this.state.radioOptions[initialSelectionIndex]
+    this.setState(() => ({
+      selectedOption: value,
+      currentSites: initialSites
+    }))
   }
 
   onChange = (e) => {
@@ -74,9 +97,8 @@ class LanguagesIndexPage extends React.Component {
     let currentSites = {}
 
     for (let i = 0; i < this.state.radioOptions.length; i++) {
-      if (this.state.radioOptions[i].value === this.state.selectedOption) {
+      if (this.state.radioOptions[i].value === value) {
         currentSites = this.state.radioOptions[i].initialSites
-        console.log(currentSites)
       }
     }
 
