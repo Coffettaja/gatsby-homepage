@@ -77,7 +77,7 @@ export default class MultiSearch extends React.Component {
   render() {
     return (
       <form onSubmit={this.onSubmit}>
-        <SearchValueInput placeholder="Search a word" onChange={this.onSearchInputChange} value={this.state.searchValue} type="text"/>
+        <SearchValueInput placeholder={this.props.searchBoxText} onChange={this.onSearchInputChange} value={this.state.searchValue} type="text"/>
         <ToggleContainer>
           {Object.keys(this.state.toggles).map((toggleKey, index) => (
             <Toggle
