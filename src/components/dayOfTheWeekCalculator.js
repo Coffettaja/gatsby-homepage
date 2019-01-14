@@ -1,7 +1,5 @@
 import React from 'react'
-import {RadioGroup, RadioOption} from './radioGroup'
-// import RadioOption from './radioOption'
-import {BoxInput, BoxOption} from './boxInput'
+import { RadioGroup, RadioOption } from './radioGroup'
 
 export default class DayOfTheWeekCalculator extends React.Component {
 
