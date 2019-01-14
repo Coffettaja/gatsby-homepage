@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 const ToggleContainer = styled.div`
   background-color: hsl(15, 5%, 95%);
@@ -16,6 +17,9 @@ const SearchValueInput = styled.input`
   margin-top: 2rem;
 `
 
+/**
+ * A component for making simple checkbox in a label tag.
+ */
 const Toggle = ({labelText,  ...rest}) => (
   <label>
     <input {...rest} value={labelText} type="checkbox" />
@@ -23,6 +27,15 @@ const Toggle = ({labelText,  ...rest}) => (
   </label>
 )
 
+Toggle.propTypes = {
+  labelText: PropTypes.string.isRequired,
+}
+
+/**
+ *
+ * Component that is responsible for opening all the sites selected,
+ * using the search value provided in the search input.
+ */
 export default class MultiSearch extends React.Component {
   constructor(props) {
     super(props)
@@ -37,9 +50,13 @@ export default class MultiSearch extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault()
+
+    // Don't submit if there is an error
     if (this.state.searchError.length > 0) {
       return
     }
+
+    // Search all the sites that have been checked using the search value provided from state.searchValue
     Object.keys(this.props.initialSites)
        .filter(toggleValue => this.props.initialSites[toggleValue].checked)
        .forEach((toggleValue) => {
@@ -49,6 +66,9 @@ export default class MultiSearch extends React.Component {
     }) 
   }
 
+  /**
+   * Update the state.searchValue and state.searchError to match the text input.
+   */
   onSearchInputChange = (e) => {
     const searchValue = e.target.value
     let searchError = ''
@@ -93,4 +113,16 @@ export default class MultiSearch extends React.Component {
       
     )
   }
+}
+
+MultiSearch.defaultProps = {
+  searchTermCode: '$searchterm$',
+  searchBoxText: 'Search multiple sites',
+  initialSites: {}
+}
+
+MultiSearch.propTypes = {
+  initialSites: PropTypes.objectOf(PropTypes.object),
+  searchTermCode: PropTypes.string,
+  searchBoxText: PropTypes.string
 }

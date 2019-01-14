@@ -7,8 +7,20 @@ import './layout.css'
 import styled from 'styled-components'
 
 const Container = styled.div`
-  margin: 4rem auto;
-  width: 70%;
+  margin: 2.5rem auto;
+  width: 65%;
+  background-color: hsl(208, 100%, 95%);
+  padding: 5rem 6rem;
+  box-shadow: 0.2rem 1rem 3rem rgba(0,0,0, 0.2);
+`
+
+const Footer = styled.footer`
+  background-color: hsl(197, 73%, 41%);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 5rem;
 `
 
 const Layout = ({ children }) => (
@@ -27,10 +39,10 @@ const Layout = ({ children }) => (
         <Header siteTitle={data.site.siteMetadata.title} />
         <Container>
           {children}
-          <footer>
-            © 2019, Built with <a href="https://www.gatsbyjs.org">Gatsby</a>
-          </footer>
         </Container>
+        <Footer>
+          © 2019, Built with <a href="https://www.gatsbyjs.org">Gatsby</a>
+        </Footer>
       </>
     )}
   />
