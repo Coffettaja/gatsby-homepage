@@ -53,7 +53,6 @@ class LanguagesIndexPage extends React.Component {
         value: 'korean',
         initialSites: {
           'in English': {
-            labelText: 'dictionary',
             url: 'https://endic.naver.com/search.nhn?sLn=en&searchOption=entry_idiom&query=$searchterm$',
             checked: true
           },
@@ -114,6 +113,14 @@ class LanguagesIndexPage extends React.Component {
     }))
   }
 
+  addSite = () => {
+    const newToggle = {
+      url: '#',
+      checked: false
+    }
+    
+  }
+
   render() {
     return (
       <Layout>
@@ -126,6 +133,7 @@ class LanguagesIndexPage extends React.Component {
         <MultiSearch
           searchBoxText={`Search ${this.state.selectedOption}`}
           initialSites={this.state.currentSites}
+          onAddToggle={this.addSite}
         ></MultiSearch>
       </Layout>
     )

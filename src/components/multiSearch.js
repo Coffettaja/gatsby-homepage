@@ -58,13 +58,6 @@ export default class MultiSearch extends React.Component {
     }
   }
 
-  componentDidMount = () => {
-    const currentSites = this.props.initialSites
-    this.setState(() => ({
-      currentSites
-    }))
-  }
-
   onSubmit = (e) => {
     e.preventDefault()
 
@@ -110,11 +103,8 @@ export default class MultiSearch extends React.Component {
    }))
   }
 
-  addToggle = (e) => {
-
-  }
-
   render() {
+    
     return (
       <form onSubmit={this.onSubmit}>
         <SearchValueInput placeholder={this.props.searchBoxText} onChange={this.onSearchInputChange} value={this.state.searchValue} type="text"/>
@@ -127,7 +117,7 @@ export default class MultiSearch extends React.Component {
               key={index}
             ></Toggle> 
           ))}
-          <NewToggleButton onClick={this.addToggle}>New toggle</NewToggleButton>
+          <NewToggleButton onClick={this.props.onAddToggle}>New toggle</NewToggleButton>
         </ToggleContainer>
         <p>{this.state.searchError}</p>
         <button>MultiSearch</button>

@@ -16,11 +16,11 @@ const Container = styled.div`
 
 const Footer = styled.footer`
   background-color: hsl(197, 73%, 41%);
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 5rem;
+  height: 2rem;
 `
 
 const Layout = ({ children }) => (
