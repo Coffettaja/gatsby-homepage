@@ -61,8 +61,8 @@ export default class MultiSearch extends React.Component {
   onSubmit = (e) => {
     e.preventDefault()
 
-    // Don't submit if there is an error
-    if (this.state.searchError.length > 0) {
+    // Don't submit if there is an error or no search value
+    if (this.state.searchError.length > 0 || this.state.searchValue.length === 0) {
       return
     }
 
@@ -103,6 +103,11 @@ export default class MultiSearch extends React.Component {
    }))
   }
 
+  addToggle = (e) => {
+  e.preventDefault()
+  this.props.onAddToggle(e)
+  }
+
   render() {
     
     return (
@@ -117,7 +122,7 @@ export default class MultiSearch extends React.Component {
               key={index}
             ></Toggle> 
           ))}
-          <NewToggleButton onClick={this.props.onAddToggle}>New toggle</NewToggleButton>
+          <NewToggleButton onClick={this.addToggle}>New toggle</NewToggleButton>
         </ToggleContainer>
         <p>{this.state.searchError}</p>
         <button>MultiSearch</button>

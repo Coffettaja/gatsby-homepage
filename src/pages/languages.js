@@ -27,7 +27,7 @@ class LanguagesIndexPage extends React.Component {
             checked: false
           },
           images: {
-            url: 'https://www.google.com/search?tbm=isch&q=$searchterm$',
+            url: 'https://www.google.co.jp/search?q=$searchterm$&tbm=isch&sout=1',
             checked: true
           },
           pronunciation: {
@@ -60,7 +60,7 @@ class LanguagesIndexPage extends React.Component {
           },
           images: {
             labelText: 'image',
-            url: 'https://www.google.com/search?tbm=isch&q=$searchterm$',
+            url: 'https://www.google.com/search?q=$searchterm$&tbm=isch&sout=1',
             checked: true
           },
           pronunciation: {
@@ -70,7 +70,7 @@ class LanguagesIndexPage extends React.Component {
           },
           wiki: {
             labelText: 'wiki',
-            url: 'https://ja.wikipedia.org/wiki/$searchterm$',
+            url: 'https://ko.wikipedia.org/wiki/$searchterm$',
             checked: false
           },
         }
@@ -113,12 +113,13 @@ class LanguagesIndexPage extends React.Component {
     }))
   }
 
-  addSite = () => {
+  addSite = (e) => {
+    
     const newToggle = {
       url: '#',
       checked: false
     }
-    
+    console.log("adding site!")
   }
 
   render() {
