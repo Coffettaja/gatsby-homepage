@@ -67,11 +67,11 @@ export default class MultiSearch extends React.Component {
     }
 
     // Search all the sites that have been checked using the search value provided from state.searchValue
-    Object.keys(this.props.initialSites)
-       .filter(toggleValue => this.props.initialSites[toggleValue].checked)
+    Object.keys(this.props.sites)
+       .filter(toggleValue => this.props.sites[toggleValue].checked)
        .forEach((toggleValue) => {
          window.open(
-           this.props.initialSites[toggleValue].url
+           this.props.sites[toggleValue].url
            .replace(this.props.searchTermCode, this.state.searchValue))
     }) 
   }
@@ -96,7 +96,7 @@ export default class MultiSearch extends React.Component {
   onToggle = (e) => {
    const toggleToChange = e.target.value
    const newValue = e.target.checked
-   const newToggles = this.props.initialSites
+   const newToggles = this.props.sites
    newToggles[toggleToChange].checked = newValue
     this.setState(() => ({
       toggles: newToggles
@@ -109,11 +109,11 @@ export default class MultiSearch extends React.Component {
       <form onSubmit={this.onSubmit}>
         <SearchValueInput placeholder={this.props.searchBoxText} onChange={this.onSearchInputChange} value={this.state.searchValue} type="text"/>
         <ToggleContainer>
-          {Object.keys(this.props.initialSites).map((toggleKey, index) => (
+          {Object.keys(this.props.sites).map((toggleKey, index) => (
             <Toggle
               labelText={toggleKey}
               onChange={this.onToggle}
-              checked={this.props.initialSites[toggleKey].checked}
+              checked={this.props.sites[toggleKey].checked}
               key={index}
             ></Toggle> 
           ))}
@@ -130,11 +130,11 @@ export default class MultiSearch extends React.Component {
 MultiSearch.defaultProps = {
   searchTermCode: '$searchterm$',
   searchBoxText: 'Search multiple sites',
-  initialSites: {}
+  sites: {}
 }
 
 MultiSearch.propTypes = {
-  initialSites: PropTypes.objectOf(PropTypes.object),
+  sites: PropTypes.objectOf(PropTypes.object),
   searchTermCode: PropTypes.string,
   searchBoxText: PropTypes.string
 }

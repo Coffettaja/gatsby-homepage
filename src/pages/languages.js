@@ -10,12 +10,11 @@ class LanguagesIndexPage extends React.Component {
   state = {
     // radioOptions holds the info that each value of a radio button displays,
     // that is, the search engine options that can be used in the MultiSearch.
-    radioOptions: [
-      {
-        value: 'japanese', // Also used for the label of the button.
+    radioOptions: {
+      'japanese': { // also the label of the created checkbox
         // initialSites are the default sites for that MultiSearch uses
         // for the search.
-        initialSites: {
+        sites: {
           // Object property name also used as the label text for the toggles
           // in MultiSearch.
           translation: {
@@ -49,9 +48,8 @@ class LanguagesIndexPage extends React.Component {
           },
         }
       },
-      {
-        value: 'korean',
-        initialSites: {
+      'korean': {
+        sites: {
           'in English': {
             url: 'https://endic.naver.com/search.nhn?sLn=en&searchOption=entry_idiom&query=$searchterm$',
             checked: true
@@ -77,7 +75,7 @@ class LanguagesIndexPage extends React.Component {
           },
         }
       }
-    ],
+    },
     selectedOption: '',
     currentSites: {},
   }
@@ -86,10 +84,10 @@ class LanguagesIndexPage extends React.Component {
    * After mounting, set the initial selection
    */
   componentDidMount = () => {
-    const initialSelectionIndex = 0 // One of the objects in state.radioOptions
-    const {value, initialSites} = this.state.radioOptions[initialSelectionIndex]
+    const initialSelection = 'japanese' // One of the objects in state.radioOptions
+    const initialSites = this.state.radioOptions[initialSelection].sites
     this.setState(() => ({
-      selectedOption: value,
+      selectedOption: initialSelection,
       currentSites: initialSites
     }))
   }
@@ -99,13 +97,15 @@ class LanguagesIndexPage extends React.Component {
    */
   onChange = (e) => {
     const value = e.target.value
-    let currentSites = {}
+    let currentSites = this.state.radioOptions[value].sites
 
-    for (let i = 0; i < this.state.radioOptions.length; i++) {
-      if (this.state.radioOptions[i].value === value) {
-        currentSites = this.state.radioOptions[i].initialSites
-      }
-    }
+    // for (let i = 0; i < this.state.radioOptions.length; i++) {
+      // if (this.state.radioOptions[i].value === value) {
+        // currentSites = this.state.radioOptions[i].initialSites
+      // }
+    // }
+
+
 
     this.setState(() => ({
       selectedOption: value,
@@ -126,13 +126,14 @@ class LanguagesIndexPage extends React.Component {
       <Layout>
         <SEO title="Languages" />
         <RadioGroup name="search" value={this.state.selectedOption} onChange={this.onChange}>
-          {this.state.radioOptions.map((option, index) => (
-            <RadioOption value={option.value} key={index}>{option.value}</RadioOption>
-          ))}
+          {Object.keys(this.state.radioOptions).map((option, index) => {
+          return (
+            <RadioOption value={option} key={index}>{option}</RadioOption>
+          )})}
         </RadioGroup>
         <MultiSearch
           searchBoxText={`Search ${this.state.selectedOption}`}
-          initialSites={this.state.currentSites}
+          sites={this.state.currentSites}
           onAddToggle={this.addSite}
         ></MultiSearch>
       </Layout>
