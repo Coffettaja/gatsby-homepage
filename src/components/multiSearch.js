@@ -7,6 +7,8 @@ const ToggleContainer = styled.div`
   display: flex;
   padding: 2rem 3rem;
   margin: 2rem 0;
+  justify-content: space-around;
+  align-items: center;
 `
 
 const SearchValueInput = styled.input`
@@ -15,6 +17,14 @@ const SearchValueInput = styled.input`
   padding: .8rem;
   letter-spacing: 1px;
   margin-top: 2rem;
+`
+
+const NewToggleButton = styled.a`
+  display: block;
+  text-decoration: none;
+  background-color: orangered;
+  padding: 1rem;
+  border-radius: 3px;
 `
 
 /**
@@ -46,6 +56,13 @@ export default class MultiSearch extends React.Component {
       searchValue: '',
       searchError: '',
     }
+  }
+
+  componentDidMount = () => {
+    const currentSites = this.props.initialSites
+    this.setState(() => ({
+      currentSites
+    }))
   }
 
   onSubmit = (e) => {
@@ -93,6 +110,10 @@ export default class MultiSearch extends React.Component {
    }))
   }
 
+  addToggle = (e) => {
+
+  }
+
   render() {
     return (
       <form onSubmit={this.onSubmit}>
@@ -106,6 +127,7 @@ export default class MultiSearch extends React.Component {
               key={index}
             ></Toggle> 
           ))}
+          <NewToggleButton onClick={this.addToggle}>New toggle</NewToggleButton>
         </ToggleContainer>
         <p>{this.state.searchError}</p>
         <button>MultiSearch</button>
